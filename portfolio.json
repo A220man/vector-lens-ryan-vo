@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "vector-lens-ryan-vo",
+  "owner": "A220man",
+  "email": "ryandtvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: vector-lens-ryan-vo",
+  "workflows": [
+    "Load and browse embedding collections with vector-level statistics and nearest-neighbor lookup",
+    "Query embeddings by vector or text with k-NN search and cluster results using k-means or HDBSCAN",
+    "Step through ONNX/TorchScript model forward passes with per-layer tensor inspection and breakpoints"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
