@@ -72,7 +72,7 @@ line-length = 100
 target-version = "py312"
 select = ["E", "F", "I", "UP", "B", "C4", "PTH", "SIM", "T20", "W"]
 ignore = ["S101", "S311", "B008"]
-extend-per-file-ignores = ["backend/tests/*": ["S101", "S311"]]
+extend-per-file-ignores = { "backend/tests/*" = ["S101", "S311"] }
 
 [tool.ruff.format]
 quote-style = "double"
