@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     app_name: str = "vector-lens-ryan-vo"
     app_env: str = "development"
     debug: bool = True
-    secret_key: str = Field(default="dev-secret-change-in-production", min_length=32)
+    secret_key: str = Field(default="dev-secret-change-in-production-now", min_length=32)
 
     # Database
     database_url: str = "sqlite+aiosqlite:///./vector_lens.db"
