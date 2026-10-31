@@ -20,6 +20,10 @@ Acceptance:
 - CI runs backend tests, frontend build/test, Docker builds
 - portfolio.json, README, LICENSE, CHANGELOG present
 
+Implementation: `backend/app/main.py`, `backend/app/api/health.py`, `backend/app/api/auth.py`, `backend/app/core/config.py`, `backend/app/core/database.py`, `backend/app/core/middleware.py`, `backend/app/core/security.py`, `backend/app/models/user.py`, `backend/app/schemas/__init__.py`, `frontend/src/App.tsx`, `frontend/src/context/AuthContext.tsx`, `frontend/src/pages/LoginCallback.tsx`, `compose.yaml`, `.github/workflows/ci.yml`
+
+Tests: `backend/tests/test_health.py`, `backend/tests/test_config.py`, `backend/tests/test_security.py`, `backend/tests/test_user_model.py`, `backend/tests/test_auth.py`, `backend/tests/test_integration.py`, `frontend/src/App.test.tsx`, `frontend/src/api/client.test.ts`
+
 ### embedding-inspector — Embedding vector inspector workspace
 
 Status: planned

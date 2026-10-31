@@ -1,1 +1,97 @@
-{"schema_version":1,"current_feature":"core-skeleton","features":[{"id":"core-skeleton","title":"FastAPI/React skeleton with auth, Docker, CI","status":"in_progress","acceptance":["FastAPI app starts and serves health endpoint","React app builds and serves frontend","OIDC Keycloak authentication flow works (login/callback/logout)","Docker compose brings up backend, frontend, Keycloak, PostgreSQL","CI runs backend tests, frontend build/test, Docker builds","portfolio.json, README, LICENSE, CHANGELOG present"],"implementation":[],"tests":[]},{"id":"embedding-inspector","title":"Embedding vector inspector workspace","status":"planned","acceptance":["Upload/load embedding collections (numpy .npy, .npz, parquet, JSON)","List/search/filter embedding records with pagination","View vector details: dimensions, stats, nearest neighbors","Export selected vectors to JSON/CSV/npy"],"implementation":[],"tests":[]},{"id":"similarity-search","title":"Similarity search and clustering workflow","status":"planned","acceptance":["Query by vector or text (with local embedding model)","k-NN search with cosine/euclidean/dot product metrics","Clustering (k-means, HDBSCAN) with cluster visualization data","Results export and persistence"],"implementation":[],"tests":[]},{"id":"model-debug-trace","title":"Model forward-pass trace debugger","status":"planned","acceptance":["Load ONNX/TorchScript model and trace forward pass","Step through layers: view input/output tensors per layer","Tensor inspection: shape, stats, histograms, outliers","Breakpoint-like pause at selected layers"],"implementation":[],"tests":[]},{"id":"llm-explain","title":"Optional LLM-powered explanations","status":"planned","acceptance":["Configurable LLM provider (OpenAI-compatible, Anthropic, Gemini, Ollama)","Explain embedding neighborhoods / cluster semantics","Advisory label, grounded in actual records, clear provider errors","Works without LLM key (offline core)"],"implementation":[],"tests":[]}]}
+{
+  "schema_version": 1,
+  "current_feature": "core-skeleton",
+  "features": [
+    {
+      "id": "core-skeleton",
+      "title": "FastAPI/React skeleton with auth, Docker, CI",
+      "status": "in_progress",
+      "acceptance": [
+        "FastAPI app starts and serves health endpoint",
+        "React app builds and serves frontend",
+        "OIDC Keycloak authentication flow works (login/callback/logout)",
+        "Docker compose brings up backend, frontend, Keycloak, PostgreSQL",
+        "CI runs backend tests, frontend build/test, Docker builds",
+        "portfolio.json, README, LICENSE, CHANGELOG present"
+      ],
+      "implementation": [
+        "backend/app/main.py",
+        "backend/app/api/health.py",
+        "backend/app/api/auth.py",
+        "backend/app/core/config.py",
+        "backend/app/core/database.py",
+        "backend/app/core/middleware.py",
+        "backend/app/core/security.py",
+        "backend/app/models/user.py",
+        "backend/app/schemas/__init__.py",
+        "frontend/src/App.tsx",
+        "frontend/src/context/AuthContext.tsx",
+        "frontend/src/pages/LoginCallback.tsx",
+        "compose.yaml",
+        ".github/workflows/ci.yml"
+      ],
+      "tests": [
+        "backend/tests/test_health.py",
+        "backend/tests/test_config.py",
+        "backend/tests/test_security.py",
+        "backend/tests/test_user_model.py",
+        "backend/tests/test_auth.py",
+        "backend/tests/test_integration.py",
+        "frontend/src/App.test.tsx",
+        "frontend/src/api/client.test.ts"
+      ]
+    },
+    {
+      "id": "embedding-inspector",
+      "title": "Embedding vector inspector workspace",
+      "status": "planned",
+      "acceptance": [
+        "Upload/load embedding collections (numpy .npy, .npz, parquet, JSON)",
+        "List/search/filter embedding records with pagination",
+        "View vector details: dimensions, stats, nearest neighbors",
+        "Export selected vectors to JSON/CSV/npy"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "similarity-search",
+      "title": "Similarity search and clustering workflow",
+      "status": "planned",
+      "acceptance": [
+        "Query by vector or text (with local embedding model)",
+        "k-NN search with cosine/euclidean/dot product metrics",
+        "Clustering (k-means, HDBSCAN) with cluster visualization data",
+        "Results export and persistence"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "model-debug-trace",
+      "title": "Model forward-pass trace debugger",
+      "status": "planned",
+      "acceptance": [
+        "Load ONNX/TorchScript model and trace forward pass",
+        "Step through layers: view input/output tensors per layer",
+        "Tensor inspection: shape, stats, histograms, outliers",
+        "Breakpoint-like pause at selected layers"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "llm-explain",
+      "title": "Optional LLM-powered explanations",
+      "status": "planned",
+      "acceptance": [
+        "Configurable LLM provider (OpenAI-compatible, Anthropic, Gemini, Ollama)",
+        "Explain embedding neighborhoods / cluster semantics",
+        "Advisory label, grounded in actual records, clear provider errors",
+        "Works without LLM key (offline core)"
+      ],
+      "implementation": [],
+      "tests": []
+    }
+  ]
+}
