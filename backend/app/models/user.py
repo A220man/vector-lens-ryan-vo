@@ -16,11 +16,7 @@ class User(Base, TimestampMixin):
     roles: Mapped[str] = mapped_column(String(500), default="viewer", nullable=False)
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
     last_login: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-
-    __table_args__ = (
-        Index("ix_users_keycloak_sub", "keycloak_sub"),
-        Index("ix_users_email", "email"),
-    )
+    __table_args__ = ()
 
     def has_role(self, role: str) -> bool:
         return role in self.roles.split(",")

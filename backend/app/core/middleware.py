@@ -23,7 +23,6 @@ class SessionMiddleware(BaseHTTPMiddleware):
                 session_data = {}
 
         request.state.session = session_data
-        request.session = session_data
 
         response = await call_next(request)
         return response

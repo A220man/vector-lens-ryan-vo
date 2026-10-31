@@ -113,7 +113,7 @@ async def login(request: Request) -> RedirectResponse:
     nonce = generate_nonce()
     code_verifier = generate_code_verifier()
 
-    request.session = {"oauth_state": state, "oauth_nonce": nonce, "code_verifier": code_verifier}
+    request.state.session = {"oauth_state": state, "oauth_nonce": nonce, "code_verifier": code_verifier}
 
     auth_url = build_auth_url(state, nonce, code_verifier)
     return RedirectResponse(url=auth_url)
@@ -126,7 +126,7 @@ async def callback(
     state: str,
     db: AsyncSession = Depends(get_db),
 ) -> RedirectResponse:
-    session_data = getattr(request, "session", {})
+    session_data = getattr(request.state, "session", {})
     stored_state = session_data.get("oauth_state")
     stored_nonce = session_data.get("oauth_nonce")
     code_verifier = session_data.get("code_verifier")
