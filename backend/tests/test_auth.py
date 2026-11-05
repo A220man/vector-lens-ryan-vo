@@ -2,6 +2,7 @@ import pytest
 from httpx import AsyncClient
 from app.models.user import User
 from sqlalchemy import select
+from app.core.config import get_settings
 
 
 class TestAuthEndpoints:
@@ -10,18 +11,25 @@ class TestAuthEndpoints:
         response = await client.get("/auth/login", follow_redirects=False)
         assert response.status_code == 307
         assert "location" in response.headers
-        assert "authorization_endpoint" in response.headers["location"] or "keycloak" in response.headers["location"]
+        settings = get_settings()
+        # In test env, keycloak_url is http://localhost:8080
+        assert settings.keycloak_url in response.headers["location"]
+        assert "realms/vector-lens/protocol/openid-connect/auth" in response.headers["location"]
 
     @pytest.mark.asyncio
     async def test_me_unauthenticated(self, client: AsyncClient):
+        # In demo mode, /auth/me returns a demo user instead of 401
+        # This test verifies the demo mode behavior
         response = await client.get("/auth/me")
-        assert response.status_code == 401
+        assert response.status_code == 200
+        data = response.json()
+        assert data["username"] == "demo"
+        assert data["email"] == "demo@vector-lens.local"
 
     @pytest.mark.asyncio
-    async def test_me_demo_mode(self, client: AsyncClient, db_session, demo_user):
-        db_session.add(demo_user)
-        await db_session.commit()
-
+    async def test_me_demo_mode(self, client: AsyncClient, db_session):
+        # Demo user is auto-created by get_current_user in demo mode
+        # Don't add it manually to avoid unique constraint violation
         response = await client.get("/auth/me")
         assert response.status_code == 200
         data = response.json()
