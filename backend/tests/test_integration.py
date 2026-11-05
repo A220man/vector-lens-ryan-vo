@@ -5,6 +5,7 @@ from app.main import create_app
 from app.core.database import get_db
 from app.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.core.config import get_settings
 
 
 class TestAuthFlowIntegration:
@@ -13,6 +14,8 @@ class TestAuthFlowIntegration:
         # Login redirects to Keycloak
         login_resp = await client.get("/auth/login", follow_redirects=False)
         assert login_resp.status_code == 307
+        settings = get_settings()
+        assert settings.keycloak_url in login_resp.headers["location"]
 
         # In demo mode, /auth/me works without Keycloak
         me_resp = await client.get("/auth/me")
@@ -25,10 +28,11 @@ class TestAuthFlowIntegration:
         assert logout_resp.status_code == 200
         logout_data = logout_resp.json()
         assert "logout_url" in logout_data
-        assert "keycloak" in logout_data["logout_url"]
+        assert settings.keycloak_url in logout_data["logout_url"]
 
     @pytest.mark.asyncio
     async def test_cors_headers(self, client: AsyncClient):
+        # Test CORS on /health which supports GET and OPTIONS
         response = await client.options("/health", headers={"Origin": "http://localhost:5173"})
         assert response.status_code == 200
         assert "access-control-allow-origin" in response.headers

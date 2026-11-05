@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 import httpx
@@ -13,6 +13,12 @@ settings = get_settings()
 @router.get("/health", response_model=HealthResponse)
 async def health_check() -> HealthResponse:
     return HealthResponse()
+
+
+@router.options("/health")
+async def health_options() -> Response:
+    # CORS preflight handled by middleware, this just ensures the route exists
+    return Response(status_code=200)
 
 
 @router.get("/ready", response_model=ReadyResponse)
