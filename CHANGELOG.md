@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.4.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -40,6 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Auth login endpoint: store OAuth state in request.state.session
 - Auth callback endpoint: read OAuth state from request.state.session
 - Backend config: secret_key default value now meets min_length=32 validation (was 31 chars)
+- Auth login endpoint: persist OAuth state (state, nonce, code_verifier) in HttpOnly cookie for callback
+- Auth callback endpoint: read OAuth state from cookie, delete cookie after use, redirect to /embeddings
+- set_auth_cookies: JSON serialize session data before setting cookie
 
 ## [1.0.0] - 2026-10-14
 

@@ -27,10 +27,11 @@ CSRF_COOKIE_NAME = "vl_csrf"
 
 
 def set_auth_cookies(response: Response, session_data: dict, csrf_token: str) -> None:
+    import json
     secure = not settings.debug
     response.set_cookie(
         SESSION_COOKIE_NAME,
-        session_data,
+        json.dumps(session_data),
         httponly=True,
         secure=secure,
         samesite="lax",
@@ -108,12 +109,22 @@ async def require_admin(user: User = Depends(get_current_user)) -> User:
 
 
 @router.get("/login")
-async def login(request: Request) -> RedirectResponse:
+async def login(request: Request, response: Response) -> RedirectResponse:
     state = generate_state()
     nonce = generate_nonce()
     code_verifier = generate_code_verifier()
 
-    request.state.session = {"oauth_state": state, "oauth_nonce": nonce, "code_verifier": code_verifier}
+    import json
+    oauth_state = {"oauth_state": state, "oauth_nonce": nonce, "code_verifier": code_verifier}
+    response.set_cookie(
+        "vl_oauth_state",
+        json.dumps(oauth_state),
+        httponly=True,
+        secure=not settings.debug,
+        samesite="lax",
+        max_age=600,
+        path="/",
+    )
 
     auth_url = build_auth_url(state, nonce, code_verifier)
     return RedirectResponse(url=auth_url)
@@ -122,14 +133,23 @@ async def login(request: Request) -> RedirectResponse:
 @router.get("/callback")
 async def callback(
     request: Request,
+    response: Response,
     code: str,
     state: str,
     db: AsyncSession = Depends(get_db),
 ) -> RedirectResponse:
-    session_data = getattr(request.state, "session", {})
-    stored_state = session_data.get("oauth_state")
-    stored_nonce = session_data.get("oauth_nonce")
-    code_verifier = session_data.get("code_verifier")
+    import json
+    oauth_cookie = request.cookies.get("vl_oauth_state")
+    if not oauth_cookie:
+        raise HTTPException(status_code=400, detail="Missing OAuth state cookie")
+    try:
+        oauth_state = json.loads(oauth_cookie)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid OAuth state cookie")
+
+    stored_state = oauth_state.get("oauth_state")
+    stored_nonce = oauth_state.get("oauth_nonce")
+    code_verifier = oauth_state.get("code_verifier")
 
     if not stored_state or state != stored_state:
         raise HTTPException(status_code=400, detail="Invalid state parameter")
@@ -179,9 +199,10 @@ async def callback(
     await db.refresh(user)
 
     csrf_token = secrets.token_urlsafe(32)
-    session_json = {"sub": keycloak_sub, "user_id": str(user.id), "roles": user.roles}
+    session_json = {"sub": keycloak_sub, "user_id": str(user.id), "roles": user.roles, "id_token": id_token}
 
-    response = RedirectResponse(url=settings.oidc_post_logout_redirect_uri)
+    response = RedirectResponse(url="/embeddings")
+    response.delete_cookie("vl_oauth_state", path="/")
     set_auth_cookies(response, session_json, csrf_token)
     return response
 
