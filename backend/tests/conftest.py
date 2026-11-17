@@ -13,7 +13,7 @@ import uuid
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture
 async def test_engine():
     engine = create_async_engine(
         TEST_DATABASE_URL,
