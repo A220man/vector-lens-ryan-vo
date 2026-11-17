@@ -1,6 +1,6 @@
 {
   "name": "vector-lens-ryan-vo-frontend",
-  "version": "1.0.0",
+  "version": "1.7.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

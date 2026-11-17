@@ -228,3 +228,6 @@ async def logout(request: Request, response: Response) -> LogoutResponse:
 @router.get("/me", response_model=UserResponse)
 async def get_me(user: User = Depends(get_current_user)) -> UserResponse:
     return UserResponse.model_validate(user)
+@router.get("/ping")
+async def ping():
+    return {"status": "ok"}
