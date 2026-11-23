@@ -84,7 +84,7 @@ def build_auth_url(state: str, nonce: str, code_verifier: str) -> str:
             end_session_endpoint="",
         )
 
-    code_challenge = secrets.token_urlsafe(32)
+    code_challenge = compute_code_challenge(code_verifier)
     params = {
         "client_id": settings.keycloak_client_id,
         "response_type": "code",
